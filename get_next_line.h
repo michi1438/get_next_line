@@ -1,39 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnltester.c                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/23 13:55:25 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/24 15:39:46 by mguerga          ###   ########.fr       */
+/*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
+/*   Updated: 2022/12/24 15:17:06 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	main()
-{
-	int	fd;
-	char	*nline;
-	
-	fd = open("test.txt", O_RDONLY); 
-	nline = get_next_line(fd);
-	while (nline != NULL)
-	{
-		ft_putstr_fd(nline, 1);
-		nline = get_next_line(fd);
-	}
-	return(fd);
-}
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <stdlib.h>
 
-void ft_putstr_fd(char *str, int fd)
-{
-	int i;
-	
-	i = 0;
-	while (str[i] != '\0')
-		write(1, &str[i++], fd);
-}
+char	*get_next_line(int fd);
+void ft_putstr_fd(char *str, int fd);
+char	*ft_strjoin(char const *s1, char const *s2);
+int	readbuf(char *buf);
+size_t	ft_strlen(const char *s);
+
+#endif
 
 

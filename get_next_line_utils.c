@@ -1,39 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnltester.c                                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/23 13:55:25 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/24 15:39:46 by mguerga          ###   ########.fr       */
+/*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
+/*   Updated: 2022/12/24 13:04:11 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	main()
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int	fd;
-	char	*nline;
-	
-	fd = open("test.txt", O_RDONLY); 
-	nline = get_next_line(fd);
-	while (nline != NULL)
-	{
-		ft_putstr_fd(nline, 1);
-		nline = get_next_line(fd);
-	}
-	return(fd);
-}
+	char	*ptr;
+	int		i;
+	int		j;
 
-void ft_putstr_fd(char *str, int fd)
-{
-	int i;
-	
 	i = 0;
-	while (str[i] != '\0')
-		write(1, &str[i++], fd);
+	j = 0;
+	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (ptr == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		ptr[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		ptr[i] = s2[j];
+		i++;
+		j++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
 }
 
+size_t	ft_strlen(const char *s)
+{
+	int	i;
 
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}
