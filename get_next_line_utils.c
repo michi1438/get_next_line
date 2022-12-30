@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/24 13:04:11 by mguerga          ###   ########.fr       */
+/*   Updated: 2022/12/30 17:29:06 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,3 +47,14 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
+
+char	*freeandreplace(char *str, int ind)
+{
+	char	*nptr;
+	if (str == NULL)
+		return (NULL);
+	nptr = ft_strjoin("", &str[ind + 1]); 
+	free(str);
+	return (nptr);
+}
+
