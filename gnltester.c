@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:55:25 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/24 15:39:46 by mguerga          ###   ########.fr       */
+/*   Updated: 2022/12/29 18:17:07 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main()
 	int	fd;
 	char	*nline;
 	
-	fd = open("test.txt", O_RDONLY); 
+	fd = open("get_next_line.c", O_RDONLY); 
 	nline = get_next_line(fd);
 	while (nline != NULL)
 	{
@@ -35,5 +35,3 @@ void ft_putstr_fd(char *str, int fd)
 	while (str[i] != '\0')
 		write(1, &str[i++], fd);
 }
-
-
