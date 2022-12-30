@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/30 17:29:06 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2022/12/30 18:36:05 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,16 @@ size_t	ft_strlen(const char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
+}
+
+char *fandrline(char *line,char *buf)
+{
+	char	*nptr;
+
+	nptr = ft_strjoin(line, buf);
+	free(line);
+	free(buf);
+	return (nptr);
 }
 
 char	*freeandreplace(char *str, int ind)

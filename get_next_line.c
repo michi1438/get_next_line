@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:34:36 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/30 18:09:11 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2022/12/30 19:58:18 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@ char	*get_next_line(int fd)
 	else
 		nline = NULL;
 	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	line = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	i = 0;
 	if (nline != NULL && (i = readbuf((char *)nline)) >= 0)
 	{
-		line = ft_strjoin("\0", nline);
+		line = ft_strjoin("", nline);
 		nline = freeandreplace(nline, i);
 		return (line);
 	}
@@ -36,23 +35,27 @@ char	*get_next_line(int fd)
 	{	
 		if (readforend(buf) == 1)
 		{
-			line = ft_strjoin(line, buf);
-			free (nline);
+			line = ft_strjoin("", buf);
+			if (nline != NULL)
+				free(nline);
 			return (line);
 		}
-		else if ((i = readbuf(buf)) >= 0)
+		if ((i = readbuf(buf)) >= 0)
 		{
-			nline = freeandreplace(nline, i);
-			line = ft_strjoin("", line);
+			buf[i + 1] = '\0'; 
+			if (nline != NULL)
+				nline = freeandreplace(nline, i);
+			line = ft_strjoin("", buf);
 			return (line);
 		}
 		else
 		{
-			line = ft_strjoin(line, buf);
+			if (line != NULL)
+				line = fandrline(line, buf);
 		}
 	}
 	free(buf);
-	free(line);
+	//free(line);
 	if (nline != NULL)
 		free(nline);
 	return (NULL);
@@ -75,8 +78,6 @@ int	readbuf(char *buf)
 	int	i;
 
 	i = 0;
-	if (buf == NULL)
-		return (-1);
 	while (buf[i] != '\0')
 	{
 		if (buf[i] == '\n')
