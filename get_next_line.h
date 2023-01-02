@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/30 18:23:38 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2022/12/31 13:14:25 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 char	*get_next_line(int fd);
 void	ft_putstr_fd(char *str, int fd);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2);
 int		readbuf(char *buf);
 size_t	ft_strlen(const char *s);
 char	*freeandreplace(char *str, int ind);

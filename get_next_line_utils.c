@@ -6,13 +6,13 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/30 18:36:05 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/02 10:03:32 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*ptr;
 	int		i;
@@ -54,7 +54,6 @@ char *fandrline(char *line,char *buf)
 
 	nptr = ft_strjoin(line, buf);
 	free(line);
-	free(buf);
 	return (nptr);
 }
 
