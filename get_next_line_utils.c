@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/02 10:03:32 by mguerga          ###   ########.fr       */
+/*   Updated: 2023/01/03 13:33:41 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (ptr == NULL)
 		return (NULL);
 	while (s1[i] != '\0')
@@ -38,7 +38,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (ptr);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char *s)
 {
 	int	i;
 
@@ -48,22 +48,30 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char *fandrline(char *line,char *buf)
+char *rline(char *str,char *stradd)
 {
 	char	*nptr;
-
-	nptr = ft_strjoin(line, buf);
-	free(line);
+	
+	nptr = ft_strjoin(str, stradd);
 	return (nptr);
 }
 
+char *fandrline(char *str,char *stradd)
+{
+	char	*nptr;
+	
+	nptr = ft_strjoin(str, stradd);
+	free (str);
+	return (nptr);
+}
 char	*freeandreplace(char *str, int ind)
 {
 	char	*nptr;
+
 	if (str == NULL)
 		return (NULL);
 	nptr = ft_strjoin("", &str[ind + 1]); 
-	free(str);
+	free (str);
 	return (nptr);
 }
 

@@ -6,7 +6,7 @@
 #    By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/23 12:41:15 by mguerga           #+#    #+#              #
-#    Updated: 2023/01/02 13:34:24 by mguerga          ###   ########.fr        #
+#    Updated: 2023/01/03 12:44:38 by mguerga          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = get_next_line
 
 CC = gcc
 
-CFLAGS = -Werror -Wall -Wextra -D BUFFER_SIZE=6
+CFLAGS = -Werror -Wall -Wextra -D BUFFER_SIZE=111
 
 SRC = get_next_line.c get_next_line_utils.c
 
@@ -25,7 +25,7 @@ OBJ = $(SRC:.c=.o)
 OBJB = $(SRCB:.c=.o)
 
 test: re 
-	$(CC) $(CFLAGS) $(OBJ) $(OBJB) gnltester.c -o TEST
+	$(CC) $(CFLAGS) -g -fsanitize=leak $(OBJ) $(OBJB) gnltester.c -o TEST
 
 all: $(NAME) 
 	

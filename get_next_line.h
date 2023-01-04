@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
-/*   Updated: 2022/12/31 13:14:25 by mguerga          ###   ########.fr       */
+/*   Updated: 2023/01/03 13:34:07 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ char	*get_next_line(int fd);
 void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(char *s1, char *s2);
 int		readbuf(char *buf);
-size_t	ft_strlen(const char *s);
+size_t	ft_strlen(char *s);
 char	*freeandreplace(char *str, int ind);
-int	readforend(char *buf);
-char *fandrline(char *line,char *buf);
+char *fandrline(char *str,char *stradd);
+char *rline(char *str,char *stradd);
 
 #endif
