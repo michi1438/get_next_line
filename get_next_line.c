@@ -6,7 +6,6 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:34:36 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/03 14:23:31 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,43 +15,73 @@ char	*get_next_line(int fd)
 {
 	char	*buf;
 	char	*line;
-	char *retline;
 	static char		*nline;
 	int				i;
+	int				red;
 
-	buf = malloc(sizeof(char) * (BUFFER_SIZE));
-	line = malloc(sizeof(char) * (BUFFER_SIZE));
-	i = 0;
-	if (nline != NULL && (i = readbuf((char *)nline)) >= 0)
+	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE));
+	line = ft_calloc(1,sizeof(char) * (BUFFER_SIZE));
+	i = -1;
+	if (nline != NULL)
+		i = readbuf((char *)nline);
+	if (i >= 0)
 	{
-		free(buf);
-		retline = rline("\0", nline);
-		printf("Z%sZ\n", line);
+		line = fandrline(line, nline);
 		nline = freeandreplace(nline, i);
-		retline[i + 1] = '\0';
-		//free(line);
-		return (retline);
+		line[i + 1] = '\0';
+		free(buf);
+		return (line);
 	}
 	if (nline != NULL)
 	{
-		line = rline("\0", nline);
-		free (nline);
+		line = rline(line, nline);
+		if (nline != NULL)
+			nline = NULL;
 	}
-	while (read(fd, buf, BUFFER_SIZE) > 0)
-	{	
-		if ((i = readbuf(buf)) >= 0)
+	if (nline == NULL)
+		red = read(fd, buf, BUFFER_SIZE);
+	while (red > 0)
+	{
+		i = 0;
+		while (i < BUFFER_SIZE)
 		{
-			
+			if (buf[i] == '\0')
+			{
+				line = fandrline(line, buf);
+				free(buf);
+				if (buf[0] == '\0')
+				{
+					write(1, "i", 1);
+					return (NULL);
+				}
+				return (line);
+			}
+			i++;
+		}
+		i = readbuf(buf);
+		if (i >= 0)
+		{
 			nline = freeandreplace(buf, i);
 			buf[i + 1] = '\0'; 
 			line = fandrline(line, buf);
 			free(buf);
+			if (nline[0] == '\0')
+				free (nline);
 			return (line);
 		}
 		else if (line != NULL)
 		{
 			line = fandrline(line, buf);
 		}
+	}
+	free(buf);
+	free(line);
+	buf = NULL;
+	line = NULL;
+	if (nline != NULL)
+	{
+		free(nline);
+		nline = NULL;
 	}
 	return (NULL);
 }
@@ -62,7 +91,7 @@ int	readbuf(char *buf)
 	int	i;
 
 	i = 0;
-	while (buf[i] != '\0')
+	while (i < BUFFER_SIZE)
 	{
 		if (buf[i] == '\n')
 			return(i);

@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/03 13:33:41 by mguerga          ###   ########.fr       */
+/*   Updated: 2023/01/04 19:10:09 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (ptr == NULL)
-		return (NULL);
+	ptr = ft_calloc(sizeof(char),  (ft_strlen(s1) + ft_strlen(s2) + 1));
 	while (s1[i] != '\0')
 	{
 		ptr[i] = s1[i];
@@ -61,9 +59,14 @@ char *fandrline(char *str,char *stradd)
 	char	*nptr;
 	
 	nptr = ft_strjoin(str, stradd);
-	free (str);
+	if (str != NULL)
+	{
+		free (str);
+		str = NULL;
+	}
 	return (nptr);
 }
+
 char	*freeandreplace(char *str, int ind)
 {
 	char	*nptr;
@@ -71,7 +74,22 @@ char	*freeandreplace(char *str, int ind)
 	if (str == NULL)
 		return (NULL);
 	nptr = ft_strjoin("", &str[ind + 1]); 
-	free (str);
 	return (nptr);
 }
 
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*ptr;
+	size_t	i;
+
+	i = 0;
+	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
+		return (NULL);
+	while (i < (nmemb * size))
+	{
+		((char *)(ptr))[i] = '\0';
+		i++;
+	}
+	return (ptr);
+}
