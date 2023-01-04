@@ -15,75 +15,57 @@ char	*get_next_line(int fd)
 {
 	char	*buf;
 	char	*line;
-	static char		*nline;
+	static char		*statline;
 	int				i;
 	int				red;
 
 	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE));
 	line = ft_calloc(1,sizeof(char) * (BUFFER_SIZE));
-	i = -1;
-	if (nline != NULL)
-		i = readbuf((char *)nline);
-	if (i >= 0)
+	i = 0;
+	if (statline != NULL)
 	{
-		line = fandrline(line, nline);
-		nline = freeandreplace(nline, i);
-		line[i + 1] = '\0';
-		free(buf);
-		return (line);
+		i = readbuf(statline);
+		if (i == -1)
+			line = fandrline(line, statline);
+		else if (i >= 0)
+		{
+			line = fandrline(line, statline);
+			free(buf);
+			statline = freeandreplace(line, i);
+			line[i + 1] = '\0';
+			return (line);
+		}
 	}
-	if (nline != NULL)
-	{
-		line = rline(line, nline);
-		if (nline != NULL)
-			nline = NULL;
-	}
-	if (nline == NULL)
-		red = read(fd, buf, BUFFER_SIZE);
+	red = read(fd, buf, BUFFER_SIZE);
 	while (red > 0)
 	{
-		i = 0;
-		while (i < BUFFER_SIZE)
-		{
-			if (buf[i] == '\0')
-			{
-				line = fandrline(line, buf);
-				free(buf);
-				if (buf[0] == '\0')
-				{
-					write(1, "i", 1);
-					return (NULL);
-				}
-				return (line);
-			}
-			i++;
-		}
 		i = readbuf(buf);
 		if (i >= 0)
 		{
-			nline = freeandreplace(buf, i);
-			buf[i + 1] = '\0'; 
+			if (BUFFER_SIZE > 1)
+				statline = freeandreplace(buf, i);
+			buf[i + 1] = '\0';
 			line = fandrline(line, buf);
-			free(buf);
-			if (nline[0] == '\0')
-				free (nline);
+			free (buf);
 			return (line);
 		}
-		else if (line != NULL)
+		else
 		{
 			line = fandrline(line, buf);
 		}
+		red = read(fd, buf, BUFFER_SIZE);
+		if (red == 0)
+		{
+			free(buf);
+			return (line);
+		}
 	}
-	free(buf);
+	if (buf != NULL)
+		free(buf);
+	if (statline != NULL)
+		free(statline);
 	free(line);
-	buf = NULL;
-	line = NULL;
-	if (nline != NULL)
-	{
-		free(nline);
-		nline = NULL;
-	}
-	return (NULL);
+	return (NULL);		
 }
 
 int	readbuf(char *buf)

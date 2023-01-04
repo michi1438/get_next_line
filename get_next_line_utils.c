@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/04 19:10:09 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/05 00:10:17 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ char *fandrline(char *str,char *stradd)
 	
 	nptr = ft_strjoin(str, stradd);
 	if (str != NULL)
-	{
 		free (str);
-		str = NULL;
-	}
 	return (nptr);
 }
 
