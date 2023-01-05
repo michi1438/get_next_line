@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/05 00:51:21 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/05 19:56:33 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(char *s1, char *s2);
 int		readbuf(char *buf);
 size_t	ft_strlen(char *s);
-char	*freeandreplace(char *str, int ind);
+char	*freeandreplace(char *oldstr, char *str, int ind);
 char *fandrline(char *str,char *stradd);
 char *rline(char *str,char *stradd);
 void	*ft_calloc(size_t nmemb, size_t size);

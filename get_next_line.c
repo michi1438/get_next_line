@@ -19,8 +19,8 @@ char	*get_next_line(int fd)
 	int				i;
 	int				red;
 
-	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE));
-	line = ft_calloc(1,sizeof(char) * (BUFFER_SIZE));
+	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
+	line = ft_calloc(1,sizeof(char) * (BUFFER_SIZE) + 1);
 	i = 0;
 	if (statline != NULL)
 	{
@@ -31,7 +31,7 @@ char	*get_next_line(int fd)
 		{
 			line = fandrline(line, statline);
 			free(buf);
-			statline = freeandreplace(line, i);
+			statline = freeandreplace(statline, line, i);
 			line[i + 1] = '\0';
 			return (line);
 		}
@@ -43,7 +43,7 @@ char	*get_next_line(int fd)
 		if (i >= 0)
 		{
 			if (BUFFER_SIZE > 1)
-				statline = freeandreplace(buf, i);
+				statline = freeandreplace(statline, buf, i);
 			buf[i + 1] = '\0';
 			line = fandrline(line, buf);
 			free (buf);
@@ -51,6 +51,7 @@ char	*get_next_line(int fd)
 		}
 		else
 		{
+			buf[red] = '\0';
 			line = fandrline(line, buf);
 		}
 		red = read(fd, buf, BUFFER_SIZE);
