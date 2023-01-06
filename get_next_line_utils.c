@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/05 20:14:57 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/06 20:07:30 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	ptr = ft_calloc(sizeof(char),  (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (ptr == NULL)
+	{
+		free(s1);
+		free(s2);
+		return (NULL);
+	}
 	while (s1[i] != '\0')
 	{
 		ptr[i] = s1[i];
@@ -40,18 +46,12 @@ size_t	ft_strlen(char *s)
 {
 	int	i;
 
+	if (s == NULL)
+		return (0);
 	i = 0;
 	while (s[i] != '\0')
 		i++;
 	return (i);
-}
-
-char *rline(char *str,char *stradd)
-{
-	char	*nptr;
-	
-	nptr = ft_strjoin(str, stradd);
-	return (nptr);
 }
 
 char *fandrline(char *str,char *stradd)
@@ -59,8 +59,8 @@ char *fandrline(char *str,char *stradd)
 	char	*nptr;
 	
 	nptr = ft_strjoin(str, stradd);
-	if (str != NULL)
-		free (str);
+	free (str);
+	str = NULL;
 	return (nptr);
 }
 
@@ -72,7 +72,10 @@ char	*freeandreplace(char *oldstr, char *str, int ind)
 		return (NULL);
 	nptr = ft_strjoin("", &str[ind + 1]); 
 	if (oldstr != NULL && str != NULL)
+	{
 		free(oldstr);
+		oldstr = NULL;
+	}
 	return (nptr);
 }
 

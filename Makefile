@@ -6,7 +6,7 @@
 #    By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/23 12:41:15 by mguerga           #+#    #+#              #
-#    Updated: 2023/01/05 20:03:02 by xbeheydt         ###   ########.fr        #
+#    Updated: 2023/01/06 19:32:36 by xbeheydt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = get_next_line
 
 CC = gcc
 
-CFLAGS = -Werror -Wall -Wextra -D BUFFER_SIZE=4
+CFLAGS = -Werror -Wall -Wextra -g -D BUFFER_SIZE=42
 
 SRC = get_next_line.c get_next_line_utils.c
 

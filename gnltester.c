@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:55:25 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/05 20:20:38 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/06 20:21:01 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ int	main()
 	int	fd;
 	char	*nline;
 	
-	fd = open("get_next_line.c", O_RDONLY); 
+	fd = open("test.txt", O_RDONLY); 
 	nline = get_next_line(fd);
 	while (nline != NULL)
 	{
 		ft_putstr_fd(nline, 1);
 		nline = get_next_line(fd);
 	}
+	free (nline);
 	return(fd);
 }
 
