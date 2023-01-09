@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:55:25 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/06 20:21:01 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/09 09:47:24 by mguerga          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,20 @@ int	main()
 	while (nline != NULL)
 	{
 		ft_putstr_fd(nline, 1);
-		nline = get_next_line(fd);
+		nline = freeandget_next_line(fd, nline);
 	}
 	free (nline);
 	return(fd);
+}
+
+char *freeandget_next_line(int fd, char *nline)
+{
+	char	*nptr;
+
+	nptr = get_next_line(fd);
+	if (nline != NULL)
+		free(nline);
+	return (nptr);
 }
 
 void ft_putstr_fd(char *str, int fd)
