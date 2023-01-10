@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/06 16:53:36 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/10 12:59:54 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ char *rline(char *str,char *stradd);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		readforterm(char *buf);
 int	readstat(char *buf);
+char *replace_nline(int fd, char *nline);
 
 #endif

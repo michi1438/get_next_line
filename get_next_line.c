@@ -22,33 +22,49 @@ char	*get_next_line(int fd)
 	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
 	line = ft_calloc(1,sizeof(char) * (BUFFER_SIZE) + 1);
 	i = 0;
+	red = 0;
 	if (statline != NULL)
 	{
-		i = readstat(statline);
-		if (i == -1)
+		i = readforterm(statline);
+		if (i >= 0)
 		{
 			line = fandrline(line, statline);
-		}
-		else if (i >= 0)
-		{
-			line = fandrline(line, statline);
-			if (statline[i] == '\0')
-			{	
-				statline = NULL;
-				free (statline);
-				statline = NULL;
-				free (buf);
-				buf = NULL;
-				return (line);
+			if (line[i + 1] != '\0')
+			{
+				statline = freeandreplace(statline, line, i);
 			}
-			statline = freeandreplace(statline, line, i);
+			else
+			{
+				free(statline);
+				statline = NULL;
+			}
 			line[i + 1] = '\0';
 			free(buf);
 			buf = NULL;
 			return (line);
 		}
+		red = read(fd, buf, BUFFER_SIZE);
+		i = readstat(statline);
+		if (statline[i] == '\0' && red == 0)
+		{	
+			line = fandrline(line, statline);
+			free (statline);
+			statline = NULL;
+			free (buf);
+			return (line);
+		}
+		else if (i == -1 || red != 0)
+		{
+			line = fandrline(line, statline);
+			if (statline[i + 1] == '\0')
+			{
+				statline = NULL;
+				free(statline);
+			}
+		}
 	}
-	red = read(fd, buf, BUFFER_SIZE);
+	if (red == 0)
+		red = read(fd, buf, BUFFER_SIZE);
 	while (red > 0)
 	{	
 		i = readforterm(buf);
@@ -87,18 +103,10 @@ char	*get_next_line(int fd)
 		}
 	}
 	if (buf != NULL)
-	{
 		free(buf);
-		buf = NULL;
-	}	
 	if (statline != NULL)
-	{
 		free(statline);
-		statline = NULL;
-	}
 	free(line);
-	line = NULL;
-	write(1, "i", 1);
 	return (NULL);		
 }
 
