@@ -56,6 +56,7 @@ char	*get_next_line(int fd)
 		else if (i == -1 || red != 0)
 		{
 			line = fandrline(line, statline);
+			printf("%p\n", statline);
 			if (statline[i + 1] == '\0')
 			{
 				statline = NULL;

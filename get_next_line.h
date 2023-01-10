@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/10 12:59:54 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/10 20:12:48 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
+char	*freeandget_next_line(int fd, char *nline);
 void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(char *s);
