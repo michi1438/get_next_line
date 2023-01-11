@@ -6,12 +6,16 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 13:28:44 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/11 18:39:37 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/11 19:51:10 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 200
+# endif
 
 # include <unistd.h>
 # include <stdio.h>
