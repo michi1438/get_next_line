@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/11 09:48:04 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/11 18:41:12 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,37 +50,26 @@ size_t	ft_strlen(char *s)
 	return (i);
 }
 
-char	*fandrline(char *str, char *stradd)
+char	*freeandreplace(char *oldstr, char *stradd, int ind)
 {
 	char	*nptr;
 
-	nptr = ft_strjoin(str, stradd);
-	if (nptr == NULL)
+	if (ind >= 0)
 	{
-		free(str);
-		free(stradd);
-		return (NULL);
+		nptr = ft_strjoin("", &stradd[ind + 1]);
+		if (oldstr != NULL)
+		{
+			free(oldstr);
+			oldstr = NULL;
+		}
+		return (nptr);
 	}
-	free (str);
-	return (nptr);
-}
-
-char	*freeandreplace(char *oldstr, char *str, int ind)
-{
-	char	*nptr;
-
-	nptr = ft_strjoin("", &str[ind + 1]);
-	if (nptr == NULL)
+	else
 	{
-		free(str);
-		return (NULL);
+		nptr = ft_strjoin(oldstr, stradd);
+		free (oldstr);
+		return (nptr);
 	}
-	if (oldstr != NULL)
-	{
-		free(oldstr);
-		oldstr = NULL;
-	}
-	return (nptr);
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
@@ -98,4 +87,32 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		i++;
 	}
 	return (ptr);
+}
+
+int	readforterm(char *buf, int toggle)
+{
+	int	i;
+
+	i = 0;
+	if (toggle == 1)
+	{
+		while (buf[i] != '\0')
+		{
+			if (buf[i] == '\n')
+				return (i);
+			i++;
+		}
+		return (-1);
+	}
+	else
+	{
+		i = 0;
+		while (i < BUFFER_SIZE)
+		{
+			if (buf[i] == '\n' || buf[i] == '\0')
+				return (i);
+			i++;
+		}
+		return (-1);
+	}
 }

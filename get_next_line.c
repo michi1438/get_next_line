@@ -6,7 +6,7 @@
 /*   By: xbeheydt <xbeheydt@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 09:37:24 by xbeheydt          #+#    #+#             */
-/*   Updated: 2023/01/11 12:30:57 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/11 18:37:19 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,118 +14,103 @@
 
 char	*get_next_line(int fd)
 {
+	t_strs			strings;
 	int				i;
 	int				red;
-	char			*buf;
-	char			*line;
 	static char		*statline;
 
-	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
-	line = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
+	strings.buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
+	strings.line = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
 	i = 0;
 	red = 0;
 	if (statline != NULL)
 	{
-		if (readforterm(statline) >= 0)
-			return (ifstathasreturn(line, &statline, readforterm(statline), buf));
-		red = read(fd, buf, BUFFER_SIZE);
-		i = readstat(statline);
-		if (statline[i] == '\0' && red == 0)
-		{	
-			line = fandrline(line, statline);
-			statline = nullify(statline);
-			free (buf);
-			return (line);
-		}
-		else if (i == -1 || red != 0)
-		{
-			line = fandrline(line, statline);
-			statline = nullify(statline);
-		}
+		if (readforterm(statline, 1) >= 0)
+			return (ifstatret(&strings, &statline, i));
+		red = read(fd, strings.buf, BUFFER_SIZE);
+		i = readforterm(statline, 0);
+		strings.line = stat_after_read(&statline, &strings, red, i);
+		if (strings.line != NULL && red == 0)
+			return (strings.line);
 	}
-	if (red == 0)
-		red = read(fd, buf, BUFFER_SIZE);
-	while (red > 0)
-	{	
-		buf[red] = '\0';
-		if (readforterm(buf) >= 0)
-			return (ifbufhasreturn(buf, &statline, line, red));
-		else
-			line = fandrline(line, buf);
-		red = read(fd, buf, BUFFER_SIZE);
-		if (red == 0)
-		{
-			free(buf);
-			statline = nullify(statline);
-			return (line);
-		}
-	}
-	free(buf);
-	free(statline);
-	free(line);
-	return (NULL);
-}
-
-
-char *ifbufhasreturn(char *buf, char **statline, char *line, int red)
-{
-	int	 i;
-
-	i = readforterm(buf);
-	if (buf[i] == '\n' && buf[i + 1] != '\0')
-	{
-		*statline = freeandreplace(*statline, buf, i);
-		if (red < BUFFER_SIZE)
-			(*statline)[red - (i + 1)] = '\0';
-	}
-	buf[i + 1] = '\0';
-	line = fandrline(line, buf);
-	free (buf);
-	return (line);
-}
-
-char	*ifstathasreturn(char *line, char **statline, int i, char *buf)
-{
-	line = fandrline(line, *statline);
-	if (line[i + 1] != '\0')
-		*statline = freeandreplace(*statline, line, i);
 	else
-		*statline = nullify(*statline);
-	line[i + 1] = '\0';
-	free(buf);
-	return (line);
+		red = read(fd, strings.buf, BUFFER_SIZE);
+	return (mainwhile(fd, &strings, &statline, &red));
 }
 
-char *nullify(char *stat)
+char	*stat_after_read(char **statline, t_strs *strings, int red, int i)
 {
-	free(stat);
+	if ((*statline)[i] == '\0' && red == 0)
+	{	
+		strings->line = freeandreplace(strings->line, *statline, -1);
+		free(*statline);
+		*statline = NULL;
+		free (strings->buf);
+		return (strings->line);
+	}
+	else if (i == -1 || red != 0)
+	{
+		strings->line = freeandreplace(strings->line, *statline, -1);
+		free (*statline);
+		*statline = NULL;
+		return (strings->line);
+	}
 	return (NULL);
 }
 
-int	readforterm(char *buf)
+char	*ifstatret(t_strs *strings, char **statline, int i)
 {
-	int	i;
-
-	i = 0;
-	while (buf[i] != '\0')
+	i = readforterm(*statline, 1);
+	strings->line = freeandreplace(strings->line, *statline, -1);
+	if (strings->line[i + 1] != '\0')
+		*statline = freeandreplace(*statline, strings->line, i);
+	else
 	{
-		if (buf[i] == '\n')
-			return (i);
-		i++;
+		free (*statline);
+		*statline = NULL;
 	}
-	return (-1);
+	(strings->line)[i + 1] = '\0';
+	free(strings->buf);
+	return (strings->line);
 }
 
-int	readstat(char *buf)
+char	*mainwhile(int fd, t_strs *strings, char **statline, int *red)
 {
 	int	i;
 
-	i = 0;
-	while (i < BUFFER_SIZE)
-	{
-		if (buf[i] == '\n' || buf[i] == '\0')
-			return (i);
-		i++;
+	while (*red > 0)
+	{	
+		i = readforterm(strings->buf, 1);
+		(strings->buf)[*red] = '\0';
+		if (readforterm(strings->buf, 1) >= 0)
+			return (ifbufhasreturn(strings, statline, i, red));
+		else
+			strings->line = freeandreplace(strings->line, strings->buf, -1);
+		*red = read(fd, strings->buf, BUFFER_SIZE);
+		if (*red == 0)
+		{
+			free(strings->buf);
+			free(*statline);
+			*statline = NULL;
+			return (strings->line);
+		}
 	}
-	return (-1);
+	free(strings->buf);
+	free(*statline);
+	free(strings->line);
+	return (NULL);
+}
+
+char	*ifbufhasreturn(t_strs *strings, char **statline, int i, int *red)
+{
+	if ((strings->buf)[i] == '\n' && (strings->buf)[i + 1] != '\0')
+	{
+		*statline = freeandreplace(*statline, strings->buf, i);
+		if (*red < BUFFER_SIZE)
+			(*statline)[*red - (i + 1)] = '\0';
+	}
+	(strings->buf)[i + 1] = '\0';
+	strings->line = freeandreplace(strings->line, strings->buf, -1);
+	free (strings->buf);
+	return (strings->line);
 }
