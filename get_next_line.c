@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: xbeheydt <xbeheydt@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/23 13:34:36 by mguerga           #+#    #+#             */
+/*   Created: 2023/01/11 09:37:24 by xbeheydt          #+#    #+#             */
+/*   Updated: 2023/01/11 09:41:58 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -13,14 +14,21 @@
 
 char	*get_next_line(int fd)
 {
-	char	*buf;
-	char	*line;
-	static char		*statline;
 	int				i;
 	int				red;
+	char			*buf;
+	char			*line;
+	static char		*statline;
 
 	buf = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
-	line = ft_calloc(1,sizeof(char) * (BUFFER_SIZE) + 1);
+	if (buf == NULL)
+		return (NULL);
+	line = ft_calloc(1, sizeof(char) * (BUFFER_SIZE) + 1);
+	if (line == NULL)
+	{
+		free(line);
+		return (NULL);
+	}
 	i = 0;
 	red = 0;
 	if (statline != NULL)
@@ -56,11 +64,8 @@ char	*get_next_line(int fd)
 		else if (i == -1 || red != 0)
 		{
 			line = fandrline(line, statline);
-			if (statline[i + 1] == '\0')
-			{
-				free(statline);
-				statline = NULL;
-			}
+			free(statline);
+			statline = NULL;
 		}
 	}
 	if (red == 0)
@@ -107,7 +112,7 @@ char	*get_next_line(int fd)
 	if (statline != NULL)
 		free(statline);
 	free(line);
-	return (NULL);		
+	return (NULL);
 }
 
 int	readforterm(char *buf)
@@ -115,10 +120,10 @@ int	readforterm(char *buf)
 	int	i;
 
 	i = 0;
-	while (i < BUFFER_SIZE)
+	while (buf[i] != '\0')
 	{
 		if (buf[i] == '\n')
-			return(i);
+			return (i);
 		i++;
 	}
 	return (-1);
@@ -132,7 +137,7 @@ int	readstat(char *buf)
 	while (i < BUFFER_SIZE)
 	{
 		if (buf[i] == '\n' || buf[i] == '\0')
-			return(i);
+			return (i);
 		i++;
 	}
 	return (-1);

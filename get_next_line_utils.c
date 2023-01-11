@@ -6,7 +6,7 @@
 /*   By: mguerga <mguerga@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/24 11:52:48 by mguerga           #+#    #+#             */
-/*   Updated: 2023/01/10 14:13:19 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/10 21:11:40 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ char	*ft_strjoin(char *s1, char *s2)
 	j = 0;
 	ptr = ft_calloc(sizeof(char),  (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (ptr == NULL)
+	{
+		free(s1);
+		free(s2);
 		return (NULL);
+	}
 	while (s1[i] != '\0')
 	{
 		ptr[i] = s1[i];
@@ -55,6 +59,12 @@ char *fandrline(char *str,char *stradd)
 	char	*nptr;
 	
 	nptr = ft_strjoin(str, stradd);
+	if (nptr == NULL)
+	{
+		free(str);
+		free(stradd);
+		return (NULL);
+	}
 	free (str);
 	return (nptr);
 }
@@ -64,6 +74,11 @@ char	*freeandreplace(char *oldstr, char *str, int ind)
 	char	*nptr;
 
 	nptr = ft_strjoin("", &str[ind + 1]); 
+	if (nptr == NULL)
+	{
+		free(str);
+		return (NULL);
+	}
 	if (oldstr != NULL)
 	{
 		free(oldstr);
