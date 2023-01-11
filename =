@@ -6,7 +6,7 @@
 /*   By: xbeheydt <xbeheydt@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 09:37:24 by xbeheydt          #+#    #+#             */
-/*   Updated: 2023/01/11 12:30:57 by xbeheydt         ###   ########.fr       */
+/*   Updated: 2023/01/11 10:30:23 by xbeheydt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,37 +26,54 @@ char	*get_next_line(int fd)
 	red = 0;
 	if (statline != NULL)
 	{
-		if (readforterm(statline) >= 0)
-			return (ifstathasreturn(line, &statline, readforterm(statline), buf));
+		i = readforterm(statline);
+		if (i >= 0)
+			return (ifstathasreturn(line, statline, i));
 		red = read(fd, buf, BUFFER_SIZE);
 		i = readstat(statline);
 		if (statline[i] == '\0' && red == 0)
 		{	
 			line = fandrline(line, statline);
-			statline = nullify(statline);
+			free (statline);
+			statline = NULL;
 			free (buf);
 			return (line);
 		}
 		else if (i == -1 || red != 0)
 		{
 			line = fandrline(line, statline);
-			statline = nullify(statline);
+			free(statline);
+			statline = NULL;
 		}
 	}
 	if (red == 0)
 		red = read(fd, buf, BUFFER_SIZE);
 	while (red > 0)
 	{	
-		buf[red] = '\0';
-		if (readforterm(buf) >= 0)
-			return (ifbufhasreturn(buf, &statline, line, red));
+		i = readforterm(buf);
+		if (red < BUFFER_SIZE)
+			buf[red] = '\0';
+		if (i >= 0)
+		{
+			if (buf[i] == '\n' && buf[i + 1] != '\0')
+			{
+				statline = freeandreplace(statline, buf, i);
+				if (red < BUFFER_SIZE)
+					statline[red - (i + 1)] = '\0';
+			}
+			buf[i + 1] = '\0';
+			line = fandrline(line, buf);
+			free (buf);
+			return (line);
+		}
 		else
 			line = fandrline(line, buf);
 		red = read(fd, buf, BUFFER_SIZE);
 		if (red == 0)
 		{
 			free(buf);
-			statline = nullify(statline);
+			free(statline);
+			statline = NULL;
 			return (line);
 		}
 	}
@@ -67,39 +84,19 @@ char	*get_next_line(int fd)
 }
 
 
-char *ifbufhasreturn(char *buf, char **statline, char *line, int red)
+char	*ifstathasreturn(char *line, char *statline, int i)
 {
-	int	 i;
-
-	i = readforterm(buf);
-	if (buf[i] == '\n' && buf[i + 1] != '\0')
-	{
-		*statline = freeandreplace(*statline, buf, i);
-		if (red < BUFFER_SIZE)
-			(*statline)[red - (i + 1)] = '\0';
-	}
-	buf[i + 1] = '\0';
-	line = fandrline(line, buf);
-	free (buf);
-	return (line);
-}
-
-char	*ifstathasreturn(char *line, char **statline, int i, char *buf)
-{
-	line = fandrline(line, *statline);
+	line = fandrline(line, statline);
 	if (line[i + 1] != '\0')
-		*statline = freeandreplace(*statline, line, i);
+		statline = freeandreplace(statline, line, i);
 	else
-		*statline = nullify(*statline);
+	{
+		free(statline);
+		statline = NULL;
+	}
 	line[i + 1] = '\0';
 	free(buf);
 	return (line);
-}
-
-char *nullify(char *stat)
-{
-	free(stat);
-	return (NULL);
 }
 
 int	readforterm(char *buf)
